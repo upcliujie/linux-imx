@@ -136,6 +136,7 @@ EXPORT_SYMBOL_GPL(smsc_phy_config_init);
 
 static int smsc_phy_reset(struct phy_device *phydev)
 {
+	int timeout = 50000;
 	int rc = phy_read(phydev, MII_LAN83C185_SPECIAL_MODES);
 	if (rc < 0)
 		return rc;
@@ -148,6 +149,14 @@ static int smsc_phy_reset(struct phy_device *phydev)
 		rc |= MII_LAN83C185_MODE_ALL;
 		phy_write(phydev, MII_LAN83C185_SPECIAL_MODES, rc);
 	}
+
+	phy_write(phydev, MII_BMCR, BMCR_RESET);//复位phy芯片
+	do {
+		udelay(10);
+		if (timeout-- == 0)
+			return -1;
+		rc = phy_read(phydev, MII_BMCR);
+	} while (rc & BMCR_RESET);
 
 	/* reset the phy */
 	return genphy_soft_reset(phydev);
