@@ -10,6 +10,30 @@
 / {
 	model = "Freescale i.MX6 ULL 14x14 EVK Board";
 	compatible = "fsl,imx6ull-14x14-evk", "fsl,imx6ull";
+
+	gpioled {
+		compatible = "alientek,gpioled";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_gpioled>;
+		status = "okay";
+		led-gpio = <&gpio1 3 GPIO_ACTIVE_LOW>;
+	};
+
+	beep {
+		compatible = "alientek,beep";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_beep>;
+		beep-gpio = <&gpio5 1 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
+
+	key {
+		compatible = "alientek,key";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_key>;
+		key-gpio = <&gpio1 18 GPIO_ACTIVE_LOW>;
+		status = "okay";
+	};
 };
 
 &clks {
